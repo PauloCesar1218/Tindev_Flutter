@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_tindev/models/person_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_tindev/models/slide_model.dart';
 
@@ -57,6 +58,74 @@ void initState() {
         ),
         SizedBox(width: 2.0,),
       ],
+    );
+  }
+
+  Widget _createPersonCard(Person person, int index) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.80,
+      width: MediaQuery.of(context).size.width,
+      child: Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10.0),
+            child:  Image.asset(person.imageUrl, fit: BoxFit.cover),
+          ),
+          Positioned(
+            bottom: 15.0,
+            left: 20.0,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Text(person.name, style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 30.0,
+                      letterSpacing: 1.0
+                    )),
+                    SizedBox(width: 10.0),
+                    Text(person.age, style: TextStyle(
+                      fontWeight: FontWeight.w300,
+                      color: Colors.white,
+                      fontSize: 30.0
+                    )),
+                    SizedBox(width: 10.0),
+                    Icon(FontAwesomeIcons.infoCircle, size: 15.0, color: Colors.white,)
+                  ],
+                ),
+                SizedBox(height: 5.0),
+                Row(
+                  children: <Widget>[
+                    Icon(FontAwesomeIcons.graduationCap, color: Colors.white, size: 10.0),
+                    SizedBox(width: 10.0),
+                    Text(person.university, style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white,
+                      fontSize: 16.0
+                    )),
+                  ],
+                ),
+                SizedBox(height: 5.0),
+                Row(
+                  children: <Widget>[
+                    Icon(FontAwesomeIcons.mapMarkerAlt, color: Colors.white, size: 10.0),
+                    SizedBox(width: 10.0),
+                    Text(person.location, style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white,
+                      fontSize: 16.0
+                    )),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -342,66 +411,22 @@ void initState() {
                   ),
                   padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 4.0),
                   height: MediaQuery.of(context).size.height * 0.80,
+                  width: MediaQuery.of(context).size.width,
+                  
                   child: Stack(
                     fit: StackFit.expand,
-                    children: <Widget>[
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
-                        child:  Image.asset("assets/images/me.jpg", fit: BoxFit.cover),
-                      ),
-                      Positioned(
-                        bottom: 15.0,
-                        left: 20.0,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                Text('Paulo', style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: 30.0,
-                                  letterSpacing: 1.0
-                                )),
-                                SizedBox(width: 10.0),
-                                Text('20', style: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.white,
-                                  fontSize: 30.0
-                                )),
-                                SizedBox(width: 10.0),
-                                Icon(FontAwesomeIcons.infoCircle, size: 15.0, color: Colors.white,)
-                              ],
-                            ),
-                            SizedBox(height: 5.0),
-                            Row(
-                              children: <Widget>[
-                                Icon(FontAwesomeIcons.graduationCap, color: Colors.white, size: 10.0),
-                                SizedBox(width: 10.0),
-                                Text('UMC - Sistemas de Informação', style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.white,
-                                  fontSize: 16.0
-                                )),
-                              ],
-                            ),
-                            SizedBox(height: 5.0),
-                            Row(
-                              children: <Widget>[
-                                Icon(FontAwesomeIcons.mapMarkerAlt, color: Colors.white, size: 10.0),
-                                SizedBox(width: 10.0),
-                                Text('Lives In Suzano', style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.white,
-                                  fontSize: 16.0
-                                )),
-                              ],
-                            ),
-                          ],
+                    children: people.asMap()
+                    .entries
+                    .map((person) {
+                      return Draggable<Person> (
+                        data: person.value,
+                        feedback:  _createPersonCard(person.value, person.key),
+                        child: _createPersonCard(person.value, person.key),
+                        childWhenDragging: Container(
+                          child: Text('Dragging')
                         ),
-                      ),
-                    ],
+                      );
+                    }).toList()
                   ),
                 ),
                 Expanded(
