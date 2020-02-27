@@ -21,27 +21,27 @@ class _SwiperScreenState extends State<SwiperScreen> {
   int currentPageView = 1;
 
   @override
-void initState() {
-  super.initState();
-  WidgetsBinding.instance
-        .addPostFrameCallback((_) {
-          Timer.periodic(Duration(seconds: 3), (Timer timer) {
-            if (currentPage < Slides.length-1 && _pageController.page == 0) {
-              currentPage++;
-            } else if(_pageController.page == 0 || (currentPage != 0 && _pageController.page != 0)) {
-              currentPage = 0;
-            }
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance
+    .addPostFrameCallback((_) {
+      Timer.periodic(Duration(seconds: 3), (Timer timer) {
+        if (currentPage < Slides.length-1 && _pageController.page == 0) {
+          currentPage++;
+        } else if(_pageController.page == 0 || (currentPage != 0 && _pageController.page != 0)) {
+          currentPage = 0;
+        }
 
-            if (_pageController.page == 0) {
-              _pageControllerSlides.animateToPage(
-                currentPage,
-                duration: Duration(milliseconds: 450),
-                curve: Curves.easeInExpo,
-              );
-            }
-          });
-        });
-}
+        if (_pageController.page == 0) {
+          _pageControllerSlides.animateToPage(
+            currentPage,
+            duration: Duration(milliseconds: 450),
+            curve: Curves.easeInExpo,
+          );
+        }
+      });
+    });
+  }
 
   Widget _createBullet(int index, int currentSlide) {
     Slide _slide = Slides[index];
@@ -84,6 +84,8 @@ void initState() {
                     Text(person.name, style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
+                      decoration: TextDecoration.none,
+                      fontFamily: 'Roboto',
                       fontSize: 30.0,
                       letterSpacing: 1.0
                     )),
@@ -91,6 +93,8 @@ void initState() {
                     Text(person.age, style: TextStyle(
                       fontWeight: FontWeight.w300,
                       color: Colors.white,
+                      decoration: TextDecoration.none,
+                      fontFamily: 'Roboto',
                       fontSize: 30.0
                     )),
                     SizedBox(width: 10.0),
@@ -105,6 +109,8 @@ void initState() {
                     Text(person.university, style: TextStyle(
                       fontWeight: FontWeight.w400,
                       color: Colors.white,
+                      decoration: TextDecoration.none,
+                      fontFamily: 'Roboto',
                       fontSize: 16.0
                     )),
                   ],
@@ -117,6 +123,8 @@ void initState() {
                     Text(person.location, style: TextStyle(
                       fontWeight: FontWeight.w400,
                       color: Colors.white,
+                      decoration: TextDecoration.none,
+                      fontFamily: 'Roboto',
                       fontSize: 16.0
                     )),
                   ],
@@ -397,136 +405,191 @@ void initState() {
                 ),  
               ],
             ),
-            Column(
+            Stack(
+              fit: StackFit.expand,
               children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      new BoxShadow(
-                        blurRadius: 5.0,
-                        color: Color.fromRGBO(215, 215, 215, 1),
-                        offset: Offset(0.0, 5.0)
-                      )
-                    ],
-                  ),
-                  padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 4.0),
-                  height: MediaQuery.of(context).size.height * 0.80,
-                  width: MediaQuery.of(context).size.width,
-                  
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: people.asMap()
-                    .entries
-                    .map((person) {
-                      return Draggable<Person> (
-                        data: person.value,
-                        feedback:  _createPersonCard(person.value, person.key),
-                        child: _createPersonCard(person.value, person.key),
-                        childWhenDragging: Container(
-                          child: Text('Dragging')
+                Column(
+                  children: <Widget>[
+                    Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          new BoxShadow(
+                            blurRadius: 5.0,
+                            color: Color.fromRGBO(215, 215, 215, 1),
+                            offset: Offset(0.0, 5.0)
+                          )
+                        ],
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 4.0),
+                      height: MediaQuery.of(context).size.height * 0.80,
+                      width: MediaQuery.of(context).size.width,
+                      
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: people.asMap()
+                        .entries
+                        .map((person) {
+                          return Draggable<MapEntry<int, Person>> (
+                            data: person,
+                            feedback:  _createPersonCard(person.value, person.key),
+                            child: _createPersonCard(person.value, person.key),
+                            childWhenDragging: Container(),
+                          );
+                        }).toList()
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.85,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              padding: EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100.0),
+                                color: Colors.white,
+                                boxShadow: [
+                                  new BoxShadow(
+                                    blurRadius: 10.0,
+                                    color: Color.fromRGBO(215, 215, 215, 1),
+                                    offset: Offset(0.0, 10.0)
+                                  )
+                                ],
+                              ),
+                              child: Icon(FontAwesomeIcons.redo, size: 22.0, color: Color.fromRGBO(215, 215, 215, 0.6)),
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100.0),
+                                color: Colors.white,
+                                boxShadow: [
+                                  new BoxShadow(
+                                    blurRadius: 10.0,
+                                    color: Color.fromRGBO(215, 215, 215, 0.6),
+                                    offset: new Offset(0.0, 10.0),
+                                  )
+                                ],
+                              ),
+                              child: ShaderMask(
+                                shaderCallback: (Rect bounds) {
+                                  return RadialGradient(
+                                    center: Alignment.topRight,
+                                    radius: 1.3,
+                                    colors: <Color>[
+                                      Colors.pink,
+                                      Colors.redAccent[200],
+                                    ],
+                                    tileMode: TileMode.clamp,
+                                  ).createShader(bounds);
+                                },
+                                child: Icon(FontAwesomeIcons.times, size: 32.0, color: Colors.white),
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100.0),
+                                color: Colors.white,
+                                boxShadow: [
+                                  new BoxShadow(
+                                    blurRadius: 10.0,
+                                    color: Color.fromRGBO(215, 215, 215, 0.6),
+                                    offset: new Offset(0.0, 10.0),
+                                  )
+                                ],
+                              ),
+                              child: Icon(FontAwesomeIcons.solidStar, size: 22.0, color: Color.fromRGBO(47, 193, 255, 0.9)),
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100.0),
+                                color: Colors.white,
+                                boxShadow: [
+                                  new BoxShadow(
+                                    blurRadius: 10.0,
+                                    color: Color.fromRGBO(215, 215, 215, 0.6),
+                                    offset: new Offset(0.0, 10.0),
+                                  )
+                                ],
+                              ),
+                              child: Icon(FontAwesomeIcons.solidHeart, size: 32.0, color: Color.fromRGBO(50, 205, 50, 0.7)),
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100.0),
+                                color: Colors.white,
+                                boxShadow: [
+                                  new BoxShadow(
+                                    blurRadius: 10.0,
+                                    color: Color.fromRGBO(215, 215, 215, 0.6),
+                                    offset: new Offset(0.0, 10.0),
+                                  )
+                                ],
+                              ),
+                              child: Icon(Icons.flash_on, size: 22.0, color: Color.fromRGBO(75, 30, 255, 0.9)),
+                            ),
+                          ],
                         ),
-                      );
-                    }).toList()
-                  ),
+                      ),
+                    )
+                  ],
                 ),
-                Expanded(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.85,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                Row(
+                  children: <Widget>[
+                    Column(
                       children: <Widget>[
                         Container(
+                          height: MediaQuery.of(context).size.height * 0.80,
+                          width: MediaQuery.of(context).size.width / 2,
                           padding: EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100.0),
-                            color: Colors.white,
-                            boxShadow: [
-                              new BoxShadow(
-                                blurRadius: 10.0,
-                                color: Color.fromRGBO(215, 215, 215, 1),
-                                offset: Offset(0.0, 10.0)
-                              )
-                            ],
-                          ),
-                          child: Icon(FontAwesomeIcons.redo, size: 22.0, color: Color.fromRGBO(215, 215, 215, 0.6)),
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100.0),
-                            color: Colors.white,
-                            boxShadow: [
-                              new BoxShadow(
-                                blurRadius: 10.0,
-                                color: Color.fromRGBO(215, 215, 215, 0.6),
-                                offset: new Offset(0.0, 10.0),
-                              )
-                            ],
-                          ),
-                          child: ShaderMask(
-                            shaderCallback: (Rect bounds) {
-                              return RadialGradient(
-                                center: Alignment.topRight,
-                                radius: 1.3,
-                                colors: <Color>[
-                                  Colors.pink,
-                                  Colors.redAccent[200],
-                                ],
-                                tileMode: TileMode.clamp,
-                              ).createShader(bounds);
+                          child:  DragTarget<MapEntry<int, Person>>(
+                            onAccept: (data) {
+                              print(data.value);
+                              setState(() {
+                                people.removeAt(data.key);
+                              });
                             },
-                            child: Icon(FontAwesomeIcons.times, size: 32.0, color: Colors.white),
+                            builder: (context, candidateData, rejectedData) {
+                              return Container(
+                                // // color: Colors.red,
+                                height: MediaQuery.of(context).size.height * 0.80,
+                                width: MediaQuery.of(context).size.width / 2,
+                              );
+                            },
                           ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100.0),
-                            color: Colors.white,
-                            boxShadow: [
-                              new BoxShadow(
-                                blurRadius: 10.0,
-                                color: Color.fromRGBO(215, 215, 215, 0.6),
-                                offset: new Offset(0.0, 10.0),
-                              )
-                            ],
-                          ),
-                          child: Icon(FontAwesomeIcons.solidStar, size: 22.0, color: Color.fromRGBO(47, 193, 255, 0.9)),
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100.0),
-                            color: Colors.white,
-                            boxShadow: [
-                              new BoxShadow(
-                                blurRadius: 10.0,
-                                color: Color.fromRGBO(215, 215, 215, 0.6),
-                                offset: new Offset(0.0, 10.0),
-                              )
-                            ],
-                          ),
-                          child: Icon(FontAwesomeIcons.solidHeart, size: 32.0, color: Color.fromRGBO(50, 205, 50, 0.7)),
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100.0),
-                            color: Colors.white,
-                            boxShadow: [
-                              new BoxShadow(
-                                blurRadius: 10.0,
-                                color: Color.fromRGBO(215, 215, 215, 0.6),
-                                offset: new Offset(0.0, 10.0),
-                              )
-                            ],
-                          ),
-                          child: Icon(Icons.flash_on, size: 22.0, color: Color.fromRGBO(75, 30, 255, 0.9)),
                         ),
                       ],
                     ),
-                  ),
+                    Column(
+                      children: <Widget>[
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.80,
+                          width: MediaQuery.of(context).size.width / 2,
+                          padding: EdgeInsets.all(10.0),
+                          child:  DragTarget<MapEntry<int, Person>>(
+                            onAccept: (data) {
+                              print(data.key);
+                              setState(() {
+                                people.removeAt(data.key);
+                              });
+                            },
+                            builder: (context, candidateData, rejectedData) {
+                              return Container(
+                                // color: Colors.green,
+                                height: MediaQuery.of(context).size.height * 0.80,
+                                width: MediaQuery.of(context).size.width / 2,
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 )
               ],
             ),
