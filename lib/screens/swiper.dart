@@ -72,6 +72,16 @@ class _SwiperScreenState extends State<SwiperScreen> {
             borderRadius: BorderRadius.circular(10.0),
             child:  Image.asset(person.imageUrl, fit: BoxFit.cover),
           ),
+          GestureDetector(
+            onVerticalDragUpdate: (event) {
+              print(event);
+              print('hello');
+            },
+            onHorizontalDragUpdate: (event) {
+              print(event);
+              print('hello');
+            },
+          ),
           Positioned(
             bottom: 15.0,
             left: 20.0,
@@ -540,12 +550,14 @@ class _SwiperScreenState extends State<SwiperScreen> {
                   ],
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Column(
                       children: <Widget>[
                         Container(
+                          color: Colors.red,
                           height: MediaQuery.of(context).size.height * 0.80,
-                          width: MediaQuery.of(context).size.width / 2,
+                          width: MediaQuery.of(context).size.width * 0.25,
                           padding: EdgeInsets.all(10.0),
                           child:  DragTarget<MapEntry<int, Person>>(
                             onAccept: (data) {
@@ -558,7 +570,7 @@ class _SwiperScreenState extends State<SwiperScreen> {
                               return Container(
                                 // // color: Colors.red,
                                 height: MediaQuery.of(context).size.height * 0.80,
-                                width: MediaQuery.of(context).size.width / 2,
+                                width: MediaQuery.of(context).size.width,
                               );
                             },
                           ),
@@ -568,8 +580,9 @@ class _SwiperScreenState extends State<SwiperScreen> {
                     Column(
                       children: <Widget>[
                         Container(
+                          color: Colors.green,
                           height: MediaQuery.of(context).size.height * 0.80,
-                          width: MediaQuery.of(context).size.width / 2,
+                          width: MediaQuery.of(context).size.width * 0.25,
                           padding: EdgeInsets.all(10.0),
                           child:  DragTarget<MapEntry<int, Person>>(
                             onAccept: (data) {
@@ -582,7 +595,7 @@ class _SwiperScreenState extends State<SwiperScreen> {
                               return Container(
                                 // color: Colors.green,
                                 height: MediaQuery.of(context).size.height * 0.80,
-                                width: MediaQuery.of(context).size.width / 2,
+                                width: MediaQuery.of(context).size.width,
                               );
                             },
                           ),
