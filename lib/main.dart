@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tindev/screens/home.dart';
-import 'package:flutter_tindev/screens/login.dart';
-import 'package:flutter_tindev/screens/swiper.dart';
+import 'package:flutter_tindev/router/route_generator.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -13,13 +12,14 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        // primarySwatch: Colors.blue,
         textTheme: Theme.of(context).textTheme.apply(
           fontFamily: 'Roboto',
-          bodyColor: Colors.white,
-        ),
+          // bodyColor: Colors.white,
+        ), 
       ),
-      home: SwiperScreen(),
+      initialRoute: '/swiper',
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }

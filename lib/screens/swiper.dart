@@ -1,5 +1,6 @@
 import 'dart:async';
-
+import 'package:flutter_tindev/widgets/swiperWiget.dart';
+import 'package:flutter_tindev/widgets/matchesWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tindev/models/person_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -19,6 +20,8 @@ class _SwiperScreenState extends State<SwiperScreen> {
   ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
   int currentPage = 0;
   int currentPageView = 1;
+  bool _isNopeVisible = false;
+  bool _isLikeVisible = false;
 
   @override
   void initState() {
@@ -61,99 +64,13 @@ class _SwiperScreenState extends State<SwiperScreen> {
     );
   }
 
-  Widget _createPersonCard(Person person, int index) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.80,
-      width: MediaQuery.of(context).size.width,
-      child: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10.0),
-            child:  Image.asset(person.imageUrl, fit: BoxFit.cover),
-          ),
-          GestureDetector(
-            onVerticalDragUpdate: (event) {
-              print(event);
-              print('hello');
-            },
-            onHorizontalDragUpdate: (event) {
-              print(event);
-              print('hello');
-            },
-          ),
-          Positioned(
-            bottom: 15.0,
-            left: 20.0,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Text(person.name, style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      decoration: TextDecoration.none,
-                      fontFamily: 'Roboto',
-                      fontSize: 30.0,
-                      letterSpacing: 1.0
-                    )),
-                    SizedBox(width: 10.0),
-                    Text(person.age, style: TextStyle(
-                      fontWeight: FontWeight.w300,
-                      color: Colors.white,
-                      decoration: TextDecoration.none,
-                      fontFamily: 'Roboto',
-                      fontSize: 30.0
-                    )),
-                    SizedBox(width: 10.0),
-                    Icon(FontAwesomeIcons.infoCircle, size: 15.0, color: Colors.white,)
-                  ],
-                ),
-                SizedBox(height: 5.0),
-                Row(
-                  children: <Widget>[
-                    Icon(FontAwesomeIcons.graduationCap, color: Colors.white, size: 10.0),
-                    SizedBox(width: 10.0),
-                    Text(person.university, style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white,
-                      decoration: TextDecoration.none,
-                      fontFamily: 'Roboto',
-                      fontSize: 16.0
-                    )),
-                  ],
-                ),
-                SizedBox(height: 5.0),
-                Row(
-                  children: <Widget>[
-                    Icon(FontAwesomeIcons.mapMarkerAlt, color: Colors.white, size: 10.0),
-                    SizedBox(width: 10.0),
-                    Text(person.location, style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white,
-                      decoration: TextDecoration.none,
-                      fontFamily: 'Roboto',
-                      fontSize: 16.0
-                    )),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 0.7,
+        elevation: 1,
         actions: <Widget>[
           Container(
             width: MediaQuery.of(context).size.width,
@@ -169,7 +86,7 @@ class _SwiperScreenState extends State<SwiperScreen> {
         ],
       ),
       body: Container(
-        color: Color.fromRGBO(215, 215, 215, 0.2),
+        color: Color.fromRGBO(215, 215, 215, 0.1),
         child: PageView(
           controller: _pageController,
           children: <Widget>[
@@ -250,10 +167,9 @@ class _SwiperScreenState extends State<SwiperScreen> {
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(100.0),
                                       gradient: LinearGradient(
+                                        colors: <Color>[Color.fromRGBO(253, 41, 123, 1), Color.fromRGBO(255, 101, 91, 1)],
                                         begin: Alignment.topRight,
-                                        end: Alignment.bottomLeft, 
-                                        colors: <Color>[Color.fromRGBO(255, 101, 91, 1), Color.fromRGBO(255, 101, 91, 1), Color.fromRGBO(253, 41, 123, 1)],
-                                        tileMode: TileMode.clamp
+                                        end: Alignment.bottomLeft,
                                       ),
                                       boxShadow: [
                                         new BoxShadow(
@@ -415,219 +331,8 @@ class _SwiperScreenState extends State<SwiperScreen> {
                 ),  
               ],
             ),
-            Stack(
-              fit: StackFit.expand,
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Container(
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          new BoxShadow(
-                            blurRadius: 5.0,
-                            color: Color.fromRGBO(215, 215, 215, 1),
-                            offset: Offset(0.0, 5.0)
-                          )
-                        ],
-                      ),
-                      padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 4.0),
-                      height: MediaQuery.of(context).size.height * 0.80,
-                      width: MediaQuery.of(context).size.width,
-                      
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: people.asMap()
-                        .entries
-                        .map((person) {
-                          return Draggable<MapEntry<int, Person>> (
-                            data: person,
-                            feedback:  _createPersonCard(person.value, person.key),
-                            child: _createPersonCard(person.value, person.key),
-                            childWhenDragging: Container(),
-                          );
-                        }).toList()
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.85,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                              padding: EdgeInsets.all(10.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100.0),
-                                color: Colors.white,
-                                boxShadow: [
-                                  new BoxShadow(
-                                    blurRadius: 10.0,
-                                    color: Color.fromRGBO(215, 215, 215, 1),
-                                    offset: Offset(0.0, 10.0)
-                                  )
-                                ],
-                              ),
-                              child: Icon(FontAwesomeIcons.redo, size: 22.0, color: Color.fromRGBO(215, 215, 215, 0.6)),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(10.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100.0),
-                                color: Colors.white,
-                                boxShadow: [
-                                  new BoxShadow(
-                                    blurRadius: 10.0,
-                                    color: Color.fromRGBO(215, 215, 215, 0.6),
-                                    offset: new Offset(0.0, 10.0),
-                                  )
-                                ],
-                              ),
-                              child: ShaderMask(
-                                shaderCallback: (Rect bounds) {
-                                  return RadialGradient(
-                                    center: Alignment.topRight,
-                                    radius: 1.3,
-                                    colors: <Color>[
-                                      Colors.pink,
-                                      Colors.redAccent[200],
-                                    ],
-                                    tileMode: TileMode.clamp,
-                                  ).createShader(bounds);
-                                },
-                                child: Icon(FontAwesomeIcons.times, size: 32.0, color: Colors.white),
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(10.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100.0),
-                                color: Colors.white,
-                                boxShadow: [
-                                  new BoxShadow(
-                                    blurRadius: 10.0,
-                                    color: Color.fromRGBO(215, 215, 215, 0.6),
-                                    offset: new Offset(0.0, 10.0),
-                                  )
-                                ],
-                              ),
-                              child: Icon(FontAwesomeIcons.solidStar, size: 22.0, color: Color.fromRGBO(47, 193, 255, 0.9)),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(10.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100.0),
-                                color: Colors.white,
-                                boxShadow: [
-                                  new BoxShadow(
-                                    blurRadius: 10.0,
-                                    color: Color.fromRGBO(215, 215, 215, 0.6),
-                                    offset: new Offset(0.0, 10.0),
-                                  )
-                                ],
-                              ),
-                              child: Icon(FontAwesomeIcons.solidHeart, size: 32.0, color: Color.fromRGBO(50, 205, 50, 0.7)),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(10.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100.0),
-                                color: Colors.white,
-                                boxShadow: [
-                                  new BoxShadow(
-                                    blurRadius: 10.0,
-                                    color: Color.fromRGBO(215, 215, 215, 0.6),
-                                    offset: new Offset(0.0, 10.0),
-                                  )
-                                ],
-                              ),
-                              child: Icon(Icons.flash_on, size: 22.0, color: Color.fromRGBO(75, 30, 255, 0.9)),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Container(
-                          color: Colors.red,
-                          height: MediaQuery.of(context).size.height * 0.80,
-                          width: MediaQuery.of(context).size.width * 0.25,
-                          padding: EdgeInsets.all(10.0),
-                          child:  DragTarget<MapEntry<int, Person>>(
-                            onAccept: (data) {
-                              print(data.value);
-                              setState(() {
-                                people.removeAt(data.key);
-                              });
-                            },
-                            builder: (context, candidateData, rejectedData) {
-                              return Container(
-                                // // color: Colors.red,
-                                height: MediaQuery.of(context).size.height * 0.80,
-                                width: MediaQuery.of(context).size.width,
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Container(
-                          color: Colors.green,
-                          height: MediaQuery.of(context).size.height * 0.80,
-                          width: MediaQuery.of(context).size.width * 0.25,
-                          padding: EdgeInsets.all(10.0),
-                          child:  DragTarget<MapEntry<int, Person>>(
-                            onAccept: (data) {
-                              print(data.key);
-                              setState(() {
-                                people.removeAt(data.key);
-                              });
-                            },
-                            builder: (context, candidateData, rejectedData) {
-                              return Container(
-                                // color: Colors.green,
-                                height: MediaQuery.of(context).size.height * 0.80,
-                                width: MediaQuery.of(context).size.width,
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                )
-              ],
-            ),
-            Container(
-              child: Center(
-                child: Text('Main', style: TextStyle(
-                  color: Colors.black,
-                  decoration: TextDecoration.none,
-                  fontWeight: FontWeight.w300,
-                  fontFamily: 'Roboto',
-                  fontSize: 15.0
-                )),
-              ),
-            ),
-            Container(
-              child: Center(
-                child: Text('Messages', style: TextStyle(
-                  color: Colors.black,
-                  decoration: TextDecoration.none,
-                  fontWeight: FontWeight.w300,
-                  fontFamily: 'Roboto',
-                  fontSize: 15.0
-                )),
-              ),
-            ),
+            SwipeWiget(),
+            MatchesWidget(),
           ],
           onPageChanged: (value) {
             setState(() {

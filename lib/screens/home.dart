@@ -93,6 +93,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         onTap: () {
                           print('Get Started');
+                          Navigator.of(context).pushNamed('/login');
                         },
                       ),
                       Text('Trouble logging in?', style: TextStyle(
